@@ -1,15 +1,30 @@
-import Transcriber from './components/UrlInput';
+import { useState } from "react";
+import UrlInput from "./components/UrlInput";
 
-function App() {
+export default function App() {
+  const [loading, setLoading] = useState(false);
+
+  const handleUrl = async (url) => {
+    setLoading(true);
+
+    console.log(url);
+
+    // Fetch metadata
+    // Start transcription
+
+    setLoading(false);
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-950 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-2">Reel Transcriber</h1>
-        <p className="text-zinc-400 text-center mb-8">Paste IG / YT / FB Reel link → Get transcript (client-side, free)</p>
-        <Transcriber />
-      </div>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <h1 className="mb-8 text-center text-4xl font-bold">
+        Multi Platform Reels Transcriber
+      </h1>
+
+      <UrlInput
+        onSubmit={handleUrl}
+        loading={loading}
+      />
     </div>
   );
 }
-
-export default App;
