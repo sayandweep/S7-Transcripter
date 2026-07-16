@@ -1,8 +1,9 @@
 import express from "express";
+import { downloadAudio } from "../services/downloader.js";
+import { transcribeAudio } from "../services/whisper.js";
 
 const router = express.Router();
 
-// POST /api/v1/transcribe
 router.post("/", async (req, res) => {
   try {
     const { url } = req.body;
@@ -14,25 +15,20 @@ router.post("/", async (req, res) => {
       });
     }
 
-    console.log("Received URL:", url);
+    const audioPath = await downloadAudio(url);
+    const transcript = await transcribeAudio(audioPath);
 
-    // We'll replace this with real transcription later
     return res.json({
       success: true,
-      metadata: {
-        title: "Demo Video",
-        thumbnail: "https://placehold.co/640x360",
-        platform: "youtube",
-        duration: "00:00",
-      },
-      transcript: "Transcription will appear here...",
+      ...transcript,
     });
+
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: error.message,
     });
   }
 });

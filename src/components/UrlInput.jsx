@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from 'lucide-react';
 
 export default function UrlInput({ onSubmit, loading }) {
   const [url, setUrl] = useState("");
@@ -14,20 +15,21 @@ export default function UrlInput({ onSubmit, loading }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-3xl mx-auto flex gap-3"
+      className="lg:w-150 mx-auto items-center flex gap-3 bg-stone-950 text-xs border border-stone-800 p-2 outline-none focus:none"
     >
+      <span className="pl-2 text-red-500"><Link size={12} /></span>
       <input
         type="url"
-        placeholder="Paste YouTube, Instagram, TikTok or Facebook Reel URL..."
+        placeholder="Paste video link here..."
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        className="flex-1 rounded-xl border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+        className="flex-1 text-xs outline-none"
       />
 
       <button
         type="submit"
         disabled={loading}
-        className="rounded-xl bg-black px-6 py-3 text-white disabled:opacity-50"
+        className=" hover:bg-white hover:text-black bg-red-500 text-xs uppercase px-6 py-3 font-bold text-black disabled:opacity-50"
       >
         {loading ? "Loading..." : "Transcribe"}
       </button>
