@@ -1,0 +1,5 @@
+faster-whisper==1.2.1
+av==15.0.0
+ctranslate2==4.6.0
+tokenizers==0.21.4
+huggingface-hub==0.33.4
