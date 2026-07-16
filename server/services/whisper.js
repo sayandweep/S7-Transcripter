@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 
 export function transcribeAudio(audioPath) {
   return new Promise((resolve, reject) => {
-    const python = spawn("python", ["services/whisper.py", audioPath]);
+    const python = spawn("python3", ["services/whisper.py", audioPath]);
 
     let output = "";
     let error = "";

@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
+# Install yt-dlp
+RUN pip3 install --break-system-packages yt-dlp
+
 WORKDIR /app
 
 # Copy package files
@@ -21,8 +24,11 @@ COPY requirements.txt ./
 # Install Python dependencies
 RUN pip3 install --break-system-packages -r requirements.txt
 
-# Copy the rest of the project
+# Copy project files
 COPY . .
+
+# Render provides PORT automatically
+ENV PORT=10000
 
 EXPOSE 10000
 
