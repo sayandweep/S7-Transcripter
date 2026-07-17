@@ -68,7 +68,7 @@ export default function App() {
         <p className="px-10 text-[9px] my-5 lg:my-7 text-center uppercase font-semibold"><sapan className='opacity-50 pr-2'>Supports:</sapan><span className="opacity-100">YouTube / Instagram / Facebook</span></p>
 
          {transcript &&(
-          <div className="lg:w-150 relative">
+          <div className="lg:w-150 relative" id="trans">
             <button
               onClick={copyToClipboard}
               className=" bg-red-500 px-4 w-full py-2 text-xs font-bold text-black hover:bg-amber-50 hover:text-black uppercase transition hover:"
