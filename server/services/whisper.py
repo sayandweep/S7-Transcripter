@@ -1,37 +1,30 @@
 import sys
-import json
+
+print("1", flush=True)
+
 from faster_whisper import WhisperModel
 
-sys.stdout.reconfigure(encoding="utf-8")
+print("2", flush=True)
 
 audio_path = sys.argv[1]
 
-# model
+print(audio_path, flush=True)
+
+print("3", flush=True)
+
 model = WhisperModel(
-    "small",
+    "base",
     device="cpu",
     compute_type="int8"
 )
 
-segments, info = model.transcribe(
-    audio_path,
-    beam_size=5,
-    vad_filter=True
-)
-# model end
+print("4", flush=True)
 
-result = {
-    "language": info.language,
-    "transcript": "",
-    "segments": []
-}
+segments, info = model.transcribe(audio_path)
 
-for segment in segments:
-    result["transcript"] += segment.text + " "
-    result["segments"].append({
-        "start": segment.start,
-        "end": segment.end,
-        "text": segment.text
-    })
+print("5", flush=True)
 
-print(json.dumps(result, ensure_ascii=False))
+for _ in segments:
+    print("segment", flush=True)
+
+print("6", flush=True)
