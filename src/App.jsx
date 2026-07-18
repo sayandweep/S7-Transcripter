@@ -5,12 +5,13 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [transcript, setTranscript] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL || "";
 
   const handleUrl = async (url) => {
     setLoading(true);
   
     try {
-      const response = await fetch("http://localhost:5000/api/v1/transcribe", {
+      const response = await fetch(`${API_URL}/api/v1/transcribe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -18,12 +19,14 @@ export default function App() {
         body: JSON.stringify({ url }),
       });
   
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+  
       const data = await response.json();
   
       setTitle(data.title || "");
       setTranscript(data.transcript || "");
-
-
     } catch (err) {
       console.error(err);
     } finally {
