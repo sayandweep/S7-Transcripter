@@ -8,7 +8,9 @@ export function transcribeAudio(audioPath) {
     let error = "";
 
     python.stdout.on("data", (data) => {
-      output += data.toString();
+      const text = data.toString();
+      console.log(text); // Show Python output in Docker log
+      output += text;
     });
 
     python.stderr.on("data", (data) => {
