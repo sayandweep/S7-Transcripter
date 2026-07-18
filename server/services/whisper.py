@@ -10,7 +10,7 @@ print(f"2. Audio: {audio_path}", flush=True)
 print("3. Loading model...", flush=True)
 
 model = WhisperModel(
-    "base",
+    "small",
     device="cpu",
     compute_type="int8"
 )
