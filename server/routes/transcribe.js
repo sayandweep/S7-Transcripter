@@ -5,18 +5,36 @@ import { transcribeAudio } from "../services/whisper.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
+  console.log("\n==============================");
+  console.log("📥 New transcription request");
+  console.log("==============================");
+
   try {
+    console.log("Request body:", req.body);
+
     const { url } = req.body;
 
     if (!url) {
+      console.log("❌ No URL provided");
+
       return res.status(400).json({
         success: false,
         message: "Video URL is required",
       });
     }
 
+    console.log("🎥 URL:", url);
+
+    console.log("⬇️ Starting download...");
     const audioPath = await downloadAudio(url);
+    console.log("✅ Download complete");
+    console.log("📁 Audio Path:", audioPath);
+
+    console.log("📝 Starting transcription...");
     const transcript = await transcribeAudio(audioPath);
+    console.log("✅ Transcription complete");
+
+    console.log("📤 Sending response");
 
     return res.json({
       success: true,
@@ -24,6 +42,7 @@ router.post("/", async (req, res) => {
     });
 
   } catch (error) {
+    console.error("❌ ERROR:");
     console.error(error);
 
     return res.status(500).json({
