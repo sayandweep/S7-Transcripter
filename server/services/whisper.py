@@ -1,4 +1,5 @@
 import sys
+import json
 from faster_whisper import WhisperModel
 
 print("1. Script started", flush=True)
@@ -28,10 +29,28 @@ print("6. Generator created", flush=True)
 print(f"7. Language: {info.language}", flush=True)
 
 count = 0
+transcript = ""
+segment_list = []
 
 for segment in segments:
     count += 1
     print(f"8. Segment {count}: {segment.text}", flush=True)
 
+    transcript += segment.text + " "
+    segment_list.append({
+        "start": segment.start,
+        "end": segment.end,
+        "text": segment.text
+    })
+
 print(f"9. Total segments: {count}", flush=True)
 print("10. Finished", flush=True)
+
+result = {
+    "language": info.language,
+    "transcript": transcript.strip(),
+    "segments": segment_list
+}
+
+print("11. About to print JSON", flush=True)
+print(json.dumps(result))
