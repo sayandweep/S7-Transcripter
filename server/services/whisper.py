@@ -53,4 +53,4 @@ result = {
 }
 
 print("11. About to print JSON", flush=True)
-print(json.dumps(result))
+print(json.dumps(result), flush=True)

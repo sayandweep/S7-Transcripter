@@ -2,6 +2,8 @@ import { spawn } from "child_process";
 
 export function transcribeAudio(audioPath) {
   return new Promise((resolve, reject) => {
+    console.log("🚀 Starting Python process...");
+
     const python = spawn("python3", ["services/whisper.py", audioPath]);
 
     let output = "";
@@ -10,7 +12,7 @@ export function transcribeAudio(audioPath) {
     python.stdout.on("data", (data) => {
       const text = data.toString();
 
-      // Show Python output in Docker logs
+      console.log("PYTHON STDOUT:");
       console.log(text);
 
       output += text;
@@ -19,28 +21,59 @@ export function transcribeAudio(audioPath) {
     python.stderr.on("data", (data) => {
       const text = data.toString();
 
+      console.error("PYTHON STDERR:");
       console.error(text);
 
       error += text;
     });
 
+    python.on("error", (err) => {
+      console.error("❌ PYTHON SPAWN ERROR:");
+      console.error(err);
+
+      reject(err);
+    });
+
     python.on("close", (code) => {
+      console.log("================================");
+      console.log("🐍 PYTHON PROCESS CLOSED");
+      console.log("================================");
+      console.log("Exit Code:", code);
+
+      console.log("\n----- STDOUT -----");
+      console.log(output);
+
+      console.log("\n----- STDERR -----");
+      console.log(error);
+
       if (code !== 0) {
-        return reject(new Error(error));
+        return reject(
+          new Error(error || `Python exited with code ${code}`)
+        );
       }
 
       try {
-        // Last non-empty line should be the JSON
         const lines = output
           .trim()
           .split("\n")
           .filter((line) => line.trim() !== "");
 
+        console.log("Parsed Lines:", lines.length);
+
         const jsonLine = lines[lines.length - 1];
 
-        resolve(JSON.parse(jsonLine));
+        console.log("Last Line:");
+        console.log(jsonLine);
+
+        const parsed = JSON.parse(jsonLine);
+
+        console.log("✅ JSON Parsed Successfully");
+
+        resolve(parsed);
       } catch (err) {
-        console.error("Failed to parse Python output:");
+        console.error("❌ JSON PARSE FAILED");
+        console.error(err);
+        console.error("\nComplete Output:");
         console.error(output);
 
         reject(err);
