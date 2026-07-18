@@ -1,16 +1,12 @@
 import sys
-
-print("1", flush=True)
-
 from faster_whisper import WhisperModel
 
-print("2", flush=True)
+print("1. Script started", flush=True)
 
 audio_path = sys.argv[1]
+print(f"2. Audio: {audio_path}", flush=True)
 
-print(audio_path, flush=True)
-
-print("3", flush=True)
+print("3. Loading model...", flush=True)
 
 model = WhisperModel(
     "base",
@@ -18,13 +14,24 @@ model = WhisperModel(
     compute_type="int8"
 )
 
-print("4", flush=True)
+print("4. Model loaded", flush=True)
 
-segments, info = model.transcribe(audio_path)
+print("5. Creating generator...", flush=True)
 
-print("5", flush=True)
+segments, info = model.transcribe(
+    audio_path,
+    beam_size=1,
+    vad_filter=False
+)
 
-for _ in segments:
-    print("segment", flush=True)
+print("6. Generator created", flush=True)
+print(f"7. Language: {info.language}", flush=True)
 
-print("6", flush=True)
+count = 0
+
+for segment in segments:
+    count += 1
+    print(f"8. Segment {count}: {segment.text}", flush=True)
+
+print(f"9. Total segments: {count}", flush=True)
+print("10. Finished", flush=True)
