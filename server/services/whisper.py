@@ -2,6 +2,10 @@ import sys
 import json
 from faster_whisper import WhisperModel
 
+# Fix Windows Unicode console
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 print("1. Script started", flush=True)
 
 audio_path = sys.argv[1]
@@ -16,8 +20,7 @@ model = WhisperModel(
 )
 
 print("4. Model loaded", flush=True)
-
-print("5. Creating generator...", flush=True)
+print("5. Starting transcription...", flush=True)
 
 segments, info = model.transcribe(
     audio_path,
@@ -34,23 +37,25 @@ segment_list = []
 
 for segment in segments:
     count += 1
-    print(f"8. Segment {count}: {segment.text}", flush=True)
+    print(f"8. Processed segment {count}", flush=True)
 
-    transcript += segment.text + " "
     segment_list.append({
         "start": segment.start,
         "end": segment.end,
         "text": segment.text
     })
 
+    transcript += segment.text + " "
+
 print(f"9. Total segments: {count}", flush=True)
 print("10. Finished", flush=True)
 
 result = {
+    "success": True,
     "language": info.language,
     "transcript": transcript.strip(),
     "segments": segment_list
 }
 
 print("11. About to print JSON", flush=True)
-print(json.dumps(result), flush=True)
+print(json.dumps(result, ensure_ascii=False), flush=True)
