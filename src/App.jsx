@@ -199,7 +199,7 @@ export default function App() {
           </div>)}
         
 
-{transcript && (
+{transcript && ( 
           <div
             className="lg:w-150 relative mt-6"
             id="trans"

@@ -2,13 +2,13 @@ import { spawn } from "child_process";
 
 export function transcribeAudio(audioPath) {
   return new Promise((resolve, reject) => {
-    console.log("🚀 Starting Python process...");
+    console.log("Starting Python process...");
 
     const python = spawn("python3", ["services/whisper.py", audioPath]);
 
     let output = "";
     let error = "";
-
+ 
     python.stdout.on("data", (data) => {
       const text = data.toString();
 
@@ -28,7 +28,7 @@ export function transcribeAudio(audioPath) {
     });
 
     python.on("error", (err) => {
-      console.error("❌ PYTHON SPAWN ERROR:");
+      console.error("PYTHON SPAWN ERROR:");
       console.error(err);
 
       reject(err);
@@ -36,7 +36,7 @@ export function transcribeAudio(audioPath) {
 
     python.on("close", (code) => {
       console.log("================================");
-      console.log("🐍 PYTHON PROCESS CLOSED");
+      console.log("PYTHON PROCESS CLOSED");
       console.log("================================");
       console.log("Exit Code:", code);
 
@@ -67,11 +67,11 @@ export function transcribeAudio(audioPath) {
 
         const parsed = JSON.parse(jsonLine);
 
-        console.log("✅ JSON Parsed Successfully");
+        console.log("JSON Parsed Successfully");
 
         resolve(parsed);
       } catch (err) {
-        console.error("❌ JSON PARSE FAILED");
+        console.error("JSON PARSE FAILED");
         console.error(err);
         console.error("\nComplete Output:");
         console.error(output);

@@ -1,6 +1,7 @@
 import express from "express";
 import { downloadAudio } from "../services/downloader.js";
 import { transcribeAudio } from "../services/whisper.js";
+import { translateToEnglish } from "../services/translator.js";
 
 const router = express.Router();
 
@@ -15,8 +16,6 @@ router.post("/", async (req, res) => {
     const { url } = req.body;
 
     if (!url) {
-      console.log("❌ No URL provided");
-
       return res.status(400).json({
         success: false,
         message: "Video URL is required",
@@ -28,17 +27,22 @@ router.post("/", async (req, res) => {
     console.log("⬇️ Starting download...");
     const audioPath = await downloadAudio(url);
     console.log("✅ Download complete");
-    console.log("📁 Audio Path:", audioPath);
 
     console.log("📝 Starting transcription...");
     const transcript = await transcribeAudio(audioPath);
     console.log("✅ Transcription complete");
 
+    console.log("🌐 Translating to English...");
+    const english = await translateToEnglish(transcript.transcript);
+    console.log("✅ Translation complete");
+
     console.log("📤 Sending response");
 
     return res.json({
       success: true,
-      ...transcript,
+      language: transcript.language,
+      transcript: english,
+      segments: transcript.segments,
     });
 
   } catch (error) {
