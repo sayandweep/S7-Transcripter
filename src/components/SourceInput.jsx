@@ -6,6 +6,9 @@ export default function SourceInput({
   file,
   setFile,
 }) {
+  const hasUrl = url.trim().length > 0;
+  const hasFile = file !== null;
+
   return (
     <div className="lg:w-180 space-y-6">
       {/* URL Input */}
@@ -17,9 +20,14 @@ export default function SourceInput({
         <input
           type="text"
           value={url}
+          disabled={hasFile}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="Paste YouTube, Instagram, Facebook..."
-          className="w-full rounded-xl border border-zinc-800 bg-[#0d0d0d] px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-red-500 transition"
+          placeholder={
+            hasFile
+              ? "Remove the uploaded file to enter a URL"
+              : "Paste YouTube, Instagram, Facebook..."
+          }
+          className="w-full rounded-xl border border-zinc-800 bg-[#0d0d0d] px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-red-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
         />
       </div>
 
@@ -31,11 +39,18 @@ export default function SourceInput({
       </div>
 
       {/* MP3 Upload */}
-      <label className="block border-2 border-dashed border-zinc-700 hover:border-red-500 rounded-xl p-8 cursor-pointer transition">
+      <label
+        className={`block border-2 border-dashed rounded-xl p-8 transition ${
+          hasUrl
+            ? "border-zinc-800 opacity-50 cursor-not-allowed"
+            : "border-zinc-700 hover:border-red-500 cursor-pointer"
+        }`}
+      >
         <input
           type="file"
           accept=".mp3,audio/mpeg"
           className="hidden"
+          disabled={hasUrl}
           onChange={(e) => setFile(e.target.files[0])}
         />
 
@@ -45,11 +60,17 @@ export default function SourceInput({
           </div>
 
           <h3 className="text-white text-lg font-semibold">
-            {file ? file.name : "Upload MP3 File"}
+            {file
+              ? file.name
+              : hasUrl
+              ? "Clear the URL to upload a file"
+              : "Upload MP3 File"}
           </h3>
 
           <p className="text-zinc-400 text-sm mt-2">
-            Click to browse your computer
+            {hasUrl
+              ? "File upload is disabled while a URL is entered"
+              : "Click to browse your computer"}
           </p>
 
           <p className="text-zinc-500 text-xs mt-4">

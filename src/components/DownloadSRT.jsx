@@ -18,6 +18,18 @@ export default function DownloadSRT({ title, srt }) {
     URL.revokeObjectURL(url);
   };
 
+
+
+
+  const reLoad = () => {
+    window.location.reload();
+  };
+
+  
+
+
+
+
   return (
     <div className="bg-[#0d0d0d] rounded-2xl border border-zinc-800 p-6 my-5">
       <h3 className="text-white text-lg font-semibold">
@@ -33,6 +45,12 @@ export default function DownloadSRT({ title, srt }) {
         className="mt-5 w-full bg-red-500 hover:bg-white transition rounded-xl py-3 text-black uppercase font-bold"
       >
         Download SRT
+      </button>
+      <button
+        onClick={reLoad}
+        className="mt-5 w-full bg-stone-500 hover:bg-white transition rounded-xl py-3 text-black uppercase font-bold"
+      >
+        Generate New
       </button>
     </div>
   );

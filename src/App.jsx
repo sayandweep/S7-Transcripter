@@ -155,6 +155,12 @@ export default function App() {
 
 
 
+  const reLoad = () => {
+    window.location.reload();
+  };
+  
+
+
   return (
     <div className="p-8 flex items-center justify-center">
       <div className="pattern"></div>
@@ -274,9 +280,7 @@ export default function App() {
 
 
 
-
-
-{transcript && (
+{transcript &&(
   outputFormat === "txt" ? (
     <div className="bg-[#0d0d0d] rounded-xl lg:w-180 border border-zinc-800 p-6 my-6">
       <h3 className="text-white text-lg font-semibold">
@@ -297,6 +301,12 @@ export default function App() {
       >
         {copied ? "Copied" : "Copy"}
       </button>
+      <button
+        onClick={reLoad}
+        className="mt-5 w-full bg-stone-500 hover:bg-white transition rounded-xl py-3 text-black uppercase font-bold"
+      >
+        Generate New
+      </button>
     </div>
   ) : (
     <DownloadSRT
@@ -304,7 +314,7 @@ export default function App() {
       srt={transcript}/>
   )
 )}
-      
+    
 
 
 
