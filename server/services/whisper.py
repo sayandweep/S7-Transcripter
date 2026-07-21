@@ -24,8 +24,12 @@ print("5. Starting transcription...", flush=True)
 
 segments, info = model.transcribe(
     audio_path,
-    beam_size=1,
-    vad_filter=False
+    language="hi",          # Don't let it detect language
+    task="transcribe",      # Don't auto-translate
+    beam_size=5,            # Better decoding
+    best_of=5,              # Better candidate selection
+    temperature=0.0,        # Deterministic output
+    vad_filter=True         # Remove silence/noise
 )
 
 print("6. Generator created", flush=True)

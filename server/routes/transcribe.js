@@ -3,7 +3,7 @@ import fs from "fs";
 import upload from "../middleware/upload.js";
 
 import { downloadAudio } from "../services/downloader.js";
-import { transcribeAudio } from "../services/whisper.js";
+import { transcribeAudio } from "../services/groqWhisper.js";
 import { translateToEnglish } from "../services/translator.js";
 import { generateSRT } from "../utils/srt.js";
 

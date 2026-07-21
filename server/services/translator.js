@@ -10,18 +10,28 @@ export async function translateToEnglish(text) {
 
   const response = await client.chat.completions.create({
     model: "llama-3.1-8b-instant",
+    temperature: 0,
     messages: [
       {
         role: "system",
-        content:
-          "You are a professional translator. Translate everything into fluent English. Return only the translated text.",
+        content: `You are a professional translator.
+  
+  Translate the user's text into natural English.
+  
+  Rules:
+  - Always output ONLY English.
+  - Never output Hindi or any other language.
+  - Do not explain.
+  - Do not summarize.
+  - Do not answer the user's question.
+  - Do not add extra information.
+  - Return only the translated English text.`,
       },
       {
         role: "user",
         content: text,
       },
     ],
-    temperature: 0,
   });
 
   return response.choices[0].message.content.trim();
