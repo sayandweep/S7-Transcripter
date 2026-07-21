@@ -6,7 +6,7 @@ import crypto from "crypto";
 
 const execFileAsync = promisify(execFile);
 
-export async function deleteAudio(url) {
+export async function downloadAudio(url) {
   const id = crypto.randomUUID();
 
   const outputTemplate = path.resolve("temp", `${id}.%(ext)s`);
@@ -33,7 +33,7 @@ export async function deleteAudio(url) {
   return path.resolve("temp", file);
 }
 
-export function deleteMedia(filePath) {
+export function deleteAudio(filePath) {
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);
   }
