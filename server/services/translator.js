@@ -9,7 +9,7 @@ export async function translateToEnglish(text) {
 
   const prompt = `
 Translate the following text into natural English.
-
+ 
 Rules:
 - Only return the translated English.
 - Do not explain.
@@ -21,7 +21,7 @@ ${text}
 `;
 
 const response = await ai.models.generateContent({
-  model: "gemini-3.5-flash",
+  model: "gemini-flash-latest",
   contents: [
     {
       role: "user",
