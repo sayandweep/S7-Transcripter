@@ -29,10 +29,29 @@ export async function transcribeAudio(audioPath) {
     };
   } catch (error) {
     console.error("Groq Whisper Error:", error);
-
-    return {
-      success: false,
-      error: error.message,
+  
+    if (
+      error.status === 413 ||
+      error.error?.error?.code === "request_too_large"
+    ) {
+      throw {
+        code: "VIDEO_TOO_LARGE",
+        message: "Video exceeds the maximum supported size.",
+      };
+    }
+  
+    if (
+      error.error?.error?.message?.toLowerCase().includes("no audio track")
+    ) {
+      throw {
+        code: "NO_AUDIO_TRACK",
+        message: "No audio track found in the uploaded video.",
+      };
+    }
+  
+    throw {
+      code: "TRANSCRIPTION_FAILED",
+      message: error.message || "Failed to transcribe audio.",
     };
   }
 }

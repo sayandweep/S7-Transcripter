@@ -3,10 +3,13 @@ import OutputSettings from "./components/OutputSettings";
 import DownloadSRT from "./components/DownloadSRT";
 import SourceInput from "./components/SourceInput";
 import TriggerButton from "./components/TriggerButton";
+import ErrorAlert from "./components/ErrorAlert"
+
 
 
 export default function App() {
 
+  const [error, setError] = useState(null);
 
   const [file, setFile] = useState(null);
 
@@ -134,9 +137,19 @@ export default function App() {
         setTranscript(data.srt || "");
       }
     
-    } catch (err) {
-      console.error(err);
-    } finally {
+    } 
+
+
+    catch (err) {
+      setError(
+        err.response?.data?.message ||
+        "Something went wrong."
+      );
+    }
+    
+    
+    
+    finally {
       timers.forEach(clearTimeout);
       setLoading(false);
     }}
@@ -194,7 +207,9 @@ export default function App() {
 
 
 
-
+      {error && (
+  <ErrorAlert message={error} />
+     )}
 
 
 
