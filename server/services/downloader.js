@@ -6,7 +6,7 @@ import crypto from "crypto";
 
 const execFileAsync = promisify(execFile);
 
-export async function downloadMedia(url) {
+export async function deleteAudio(url) {
   const id = crypto.randomUUID();
 
   const outputTemplate = path.resolve("temp", `${id}.%(ext)s`);
