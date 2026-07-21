@@ -19,7 +19,7 @@ export default function App() {
   const [title, setTitle] = useState("");
   const [transcript, setTranscript] = useState("");
   const [copied, setCopied] = useState(false);
-  const [url, setUrl] = useState();
+  const [url, setUrl] = useState("");
 
   const [steps, setSteps] = useState([
     { text: "Connecting to server", status: "pending" },
@@ -41,10 +41,13 @@ export default function App() {
     steps.filter((s) => s.status === "done").length * 20 +
     (steps.some((s) => s.status === "loading") ? 10 : 0);
 
-  const handleUrl = async (url) => {
+  const handleUrl = async () => {
     setLoading(true);
     setTranscript("");
     setTitle("");
+    console.log("Button clicked");
+    console.log("URL:", url);
+    console.log("File:", file);
 
     setSteps([
       { text: "Connecting to server", status: "loading" },
@@ -94,18 +97,25 @@ export default function App() {
           method: "POST",
           body: formData,
         });
-      } else {
+    
+      } else if (url.trim()) {
+
+        console.log("Sending URL request...");
+    
         response = await fetch(`${API_URL}/api/v1/transcribe`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            url,
+            url: url.trim(),
             outputFormat,
             maxWords,
           }),
         });
+    
+      } else {
+        throw new Error("Please provide a URL or upload an MP3 file.");
       }
     
       if (!response.ok) {
@@ -335,7 +345,7 @@ export default function App() {
 
     <TriggerButton
       loading={loading}
-      disabled={!url && !file}
+      disabled={!url.trim() && !file}
       onClick={handleUrl}
     />
   </>

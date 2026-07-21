@@ -1,39 +1,28 @@
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+const client = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
 });
 
 export async function translateToEnglish(text) {
-  if (!text || text.trim() === "") return "";
+  if (!text?.trim()) return "";
 
-  const prompt = `
-Translate the following text into natural English.
- 
-Rules:
-- Only return the translated English.
-- Do not explain.
-- Do not add quotation marks.
-- Preserve meaning.
+  const response = await client.chat.completions.create({
+    model: "llama-3.1-8b-instant",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a professional translator. Translate everything into fluent English. Return only the translated text.",
+      },
+      {
+        role: "user",
+        content: text,
+      },
+    ],
+    temperature: 0,
+  });
 
-Text:
-${text}
-`;
-
-const response = await ai.models.generateContent({
-  model: "gemini-flash-latest",
-  contents: [
-    {
-      role: "user",
-      parts: [{
-        text: `Translate the following text to fluent English. Return only the translation.\n\n${text}`
-      }]
-    }
-  ]
-});
-
-  return response.text.trim();
+  return response.choices[0].message.content.trim();
 }
-
-console.log("Key exists:", !!process.env.GEMINI_API_KEY);
-console.log("Key prefix:", process.env.GEMINI_API_KEY?.slice(0, 5));
