@@ -4,9 +4,11 @@ import path from "path";
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+  
     cb(
       null,
-      `${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`
+      `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`
     );
   },
 });
@@ -14,7 +16,7 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "audio/mpeg") {
     cb(null, true);
-  } else {
+  } else { 
     cb(new Error("Only MP3 files are allowed"), false);
   }
 };
